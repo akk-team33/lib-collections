@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.team33.libs</groupId>
     <artifactId>team33-collections</artifactId>
-    <version>8.0.1-SNAPSHOT</version>
-    <!--version>8.0.1</version-->
+    <version>8.1.1-SNAPSHOT</version>
+    <!--version>8.1.1</version-->
     <name>Team33 Collections Library</name>
     <description>Team33 Collections library</description>
     <!-- TODO: scm>
@@ -13,6 +13,13 @@
         <url>svn://svn.team33.net/team33-main/libs/lib-general-7/trunk</url>
     </scm -->
     <dependencies>
+        <dependency>
+            <groupId>net.team33.libs</groupId>
+            <artifactId>team33-patterns</artifactId>
+            <version>7.0.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

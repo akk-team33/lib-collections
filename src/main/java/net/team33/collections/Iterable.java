@@ -1,16 +1,20 @@
 package net.team33.collections;
 
-import java.util.function.Consumer;
-
-public interface Iterable<E> {
+/**
+ * The basic interface of any iterable class or interface in or based on this library.
+ * <p>
+ * It is mainly just a {@link java.lang.Iterable} but the {@link #iterator()}-method returns an {@link Iterator},
+ * that by definition NEVER supports the {@link Iterator#remove()}-method.
+ * <p>
+ * In particular, any instance of {@link Iterable} is IMMUTABLE - BY DEFINITION.
+ */
+public interface Iterable<E> extends java.lang.Iterable<E> {
 
     /**
-     * Performs a specified action for each contained element until all elements have been processed or the action
-     * throws an exception. Unless otherwise specified by the implementing class, actions are performed in the order
-     * of iteration (if an iteration order is specified). Exceptions thrown by the action are relayed to the caller.
+     * Returns an {@link Iterator} over elements of type {@code E}.
      *
-     * @param action The action to be performed for each element.
-     * @throws NullPointerException if the specified action is null
+     * @return an Iterator.
      */
-    void forEach(Consumer<? super E> action) throws NullPointerException;
+    @Override
+    Iterator<E> iterator();
 }
