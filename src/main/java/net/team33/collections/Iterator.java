@@ -3,8 +3,8 @@ package net.team33.collections;
 /**
  * The basic interface of any iterator class or interface in or based on this library.
  * <p>
- * It is mainly just a {@link java.util.Iterator} but the {@link #remove()}-method is specified to be not supported.
- * In particular to throw an {@link UnsupportedOperationException} in any case!
+ * It is mainly just a {@link java.util.Iterator} but the {@link #remove()}-method is specified to be not supported at
+ * all. In particular to throw an {@link UnsupportedOperationException} in any case!
  */
 public interface Iterator<E> extends java.util.Iterator<E> {
 

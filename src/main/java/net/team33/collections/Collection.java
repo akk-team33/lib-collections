@@ -22,7 +22,7 @@ public interface Collection<E> extends Iterable<E> {
      * Returns {@code true} if this collection {@link #contains(Object)}
      * all of the elements in the other collection.
      */
-    boolean containsAll(Collection<?> other);
+    boolean containsAll(Iterable<?> elements);
 
     /**
      * Returns an {@link Iterator} over the elements in this collection.
@@ -60,6 +60,8 @@ public interface Collection<E> extends Iterable<E> {
      * In particular, {@code c1.equals(c2)} implies that {@code c1.hashCode()==c2.hashCode()}.
      */
     int hashCode();
+
+    Builder<E, ? extends Collection<E>, ? extends Builder<E, ?, ?>> rebuild();
 
     /**
      * A tool that is capable of building a {@link Collection}.
