@@ -50,97 +50,97 @@ public class VariantTest {
     @Test
     public final void testWhenThen() {
         assertEquals("Double <3.141592654>", Variant.of(3.141592654)
-                .when(Double.class).apply(aDouble -> "Double <" + aDouble + ">")
-                .orWhen(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Double.class).apply(core -> "Double <" + core + ">")
+                .orWhen(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orElse("Anything else"));
     }
 
     @Test
     public final void testOrWhenDouble() {
         assertEquals("Double <3.141592654>", Variant.of(3.141592654)
-                .when(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(Double.class).apply(aDouble -> "Double <" + aDouble + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(Double.class).apply(core -> "Double <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orThrow(MyException::new));
     }
 
     @Test
     public final void testWhenNull() {
         assertEquals("<null>", Variant.of(null)
-                .whenNull().apply(() -> "<null>")
-                .orWhen(Double.class).apply(aDouble -> "Double <" + aDouble + ">")
-                .orWhen(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(null).apply(core -> "<null>")
+                .orWhen(Double.class).apply(core -> "Double <" + core + ">")
+                .orWhen(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orElseGet(() -> "Anything else"));
     }
 
     @Test
     public final void testOrWhenNull() {
         assertEquals("<null>", Variant.of(null)
-                .when(Double.class).apply(aDouble -> "Double <" + aDouble + ">")
-                .orWhen(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhenNull().apply(() -> "<null>")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Double.class).apply(core -> "Double <" + core + ">")
+                .orWhen(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(null).apply(core -> "<null>")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orElse("Anything else"));
     }
 
     @Test
     public final void testWhenNullOptional() {
         assertEquals(Optional.empty(), Variant.of(null)
-                .when(Double.class).apply(aDouble -> "Double <" + aDouble + ">")
-                .orWhen(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Double.class).apply(core -> "Double <" + core + ">")
+                .orWhen(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .optional());
     }
 
     @Test
     public final void testWhenNullOrElseGet() {
         assertEquals("Anything else", Variant.of(null)
-                .when(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orElseGet(() -> "Anything else"));
     }
 
     @Test
     public final void testOrWhenString() {
         assertEquals("String <3.141592654>", Variant.of("3.141592654")
-                .when(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(Double.class).apply(aDouble -> "Double <" + aDouble + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(Double.class).apply(core -> "Double <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orElse("Anything else"));
     }
 
     @Test
     public final void testOrElse() {
         assertEquals("Anything else", Variant.of(3.141592654)
-                .when(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orElse("Anything else"));
     }
 
     @Test
     public final void testOrElseGet() {
         assertEquals("Anything else", Variant.of(3.141592654)
-                .when(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orElseGet(() -> "Anything else"));
     }
 
     @Test(expected = MyException.class)
     public final void testOrThrow() {
         assertEquals("Double <3.141592654>", Variant.of(3.141592654)
-                .when(Integer.class).apply(integer -> "Integer <" + integer + ">")
-                .orWhen(Float.class).apply(aFloat -> "Float <" + aFloat + ">")
-                .orWhen(String.class).apply(aString -> "String <" + aString + ">")
+                .when(Integer.class).apply(core -> "Integer <" + core + ">")
+                .orWhen(Float.class).apply(core -> "Float <" + core + ">")
+                .orWhen(String.class).apply(core -> "String <" + core + ">")
                 .orThrow(MyException::new));
     }
 

@@ -26,38 +26,37 @@ public class Variant {
             }
 
             @Override
-            public <T> Function<Function<T, R>, Consequence<R>> orWhen(final Class<T> condition) {
-                return function -> this;
-            }
-
-            @Override
-            public Function<Supplier<R>, Consequence<R>> orWhenNull() {
+            public <T> Function<Function<T, R>, Consequence<R>> orWhen(final Class<T> supposed) {
                 return function -> this;
             }
         };
     }
 
-    public final <T> Variant when(final Class<T> coreClass, final Consumer<T> consumer) {
-        if (coreClass.isInstance(core)) {
-            consumer.accept(coreClass.cast(core));
+    private static <R> Consequence<R> negative(final Variant variant) {
+        return new Consequence<R>() {
+            @Override
+            public Optional<R> optional() {
+                return Optional.empty();
+            }
+
+            @Override
+            public <T> Function<Function<T, R>, Consequence<R>> orWhen(final Class<T> supposed) {
+                return variant.when(supposed);
+            }
+        };
+    }
+
+    public final <T> Variant when(final Class<T> supposed, final Consumer<T> consumer) {
+        if (supposed.isInstance(core)) {
+            consumer.accept(supposed.cast(core));
         }
         return this;
     }
 
-    public final <T, R> Function<Function<T, R>, Consequence<R>> when(final Class<T> condition) {
+    public final <T, R> Function<Function<T, R>, Consequence<R>> when(final Class<T> supposed) {
         return function -> {
-            if (condition.isInstance(core)) {
-                return positive(function.apply(condition.cast(core)));
-            } else {
-                return negative(this);
-            }
-        };
-    }
-
-    public final <R> Function<Supplier<R>, Consequence<R>> whenNull() {
-        return supplier -> {
-            if (null == core) {
-                return positive(supplier.get());
+            if (supposed.isInstance(core)) {
+                return positive(function.apply(supposed.cast(core)));
             } else {
                 return negative(this);
             }
@@ -83,25 +82,6 @@ public class Variant {
         return new StringBuilder("<").append(core).append(">").toString();
     }
 
-    private <R> Consequence<R> negative(final Variant variant) {
-        return new Consequence<R>() {
-            @Override
-            public Optional<R> optional() {
-                return Optional.empty();
-            }
-
-            @Override
-            public <T> Function<Function<T, R>, Consequence<R>> orWhen(final Class<T> condition) {
-                return variant.when(condition);
-            }
-
-            @Override
-            public Function<Supplier<R>, Consequence<R>> orWhenNull() {
-                return variant.whenNull();
-            }
-        };
-    }
-
     public interface Condition<T, R> {
 
         Consequence<R> reply(Function<T, R> function);
@@ -111,9 +91,7 @@ public class Variant {
 
         Optional<R> optional();
 
-        <T> Function<Function<T, R>, Consequence<R>> orWhen(Class<T> coreClass);
-
-        Function<Supplier<R>, Consequence<R>> orWhenNull();
+        <T> Function<Function<T, R>, Consequence<R>> orWhen(Class<T> supposed);
 
         default R orElse(final R result) {
             return optional().orElse(result);
