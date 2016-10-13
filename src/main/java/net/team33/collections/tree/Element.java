@@ -1,22 +1,26 @@
 package net.team33.collections.tree;
 
-import net.team33.collections.patterns.Variant;
+import net.team33.collections.patterns.Fuzzy;
 
-import java.util.function.Consumer;
+public class Element extends Fuzzy implements Node {
 
-public class Element extends Variant implements Node {
+    private final Fuzzy backing;
 
-    private Element(final Object core) {
-        super(core);
+    public Element(final Fuzzy backing) {
+        this.backing = backing;
     }
 
     public static Element of(final Object core) {
-        return new Element(core);
+        return new Element(Fuzzy.of(core));
     }
 
     @Override
-    public final Node ifElement(final Consumer<Element> consumer) {
-        consumer.accept(this);
-        return this;
+    public final Object getSubject() {
+        return backing.getSubject();
+    }
+
+    @Override
+    public final <T, R> Conditional<T, R> when(final Class<T> assumed) {
+        return backing.when(assumed);
     }
 }
