@@ -1,8 +1,11 @@
 package net.team33.collections;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 public interface Collection<E> {
 
@@ -148,5 +151,10 @@ public interface Collection<E> {
     }
 
     abstract class Base<E> implements Collection<E> {
+
+        @Override
+        public final String toString() {
+            return stream().map(Objects::toString).collect(joining(",", "[", "]"));
+        }
     }
 }
