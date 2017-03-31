@@ -25,4 +25,9 @@ public class HashSet<E> implements Set.Mutable<E, HashSet<E>, HashSet<E>> {
         backing.remove(element);
         return this;
     }
+
+    @Override public final HashSet<E> clear() {
+        backing.clear();
+        return this;
+    }
 }

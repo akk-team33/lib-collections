@@ -52,4 +52,13 @@ public class HashSetTest {
         Assert.assertEquals(0, set.size());
         Assert.assertEquals(true, set.isEmpty());
     }
+
+    @Test
+    public final void clear() {
+        final HashSet<String> set = new HashSet<String>()
+                .addAll(aStream())
+                .clear();
+        Assert.assertEquals(0, set.size());
+        Assert.assertEquals(true, set.isEmpty());
+    }
 }

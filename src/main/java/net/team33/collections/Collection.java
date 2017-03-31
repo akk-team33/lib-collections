@@ -2,7 +2,7 @@ package net.team33.collections;
 
 import java.util.stream.Stream;
 
-public interface Set<E> {
+public interface Collection<E> {
 
     /**
      * See {@link java.util.Collection#contains(Object)}
@@ -28,7 +28,7 @@ public interface Set<E> {
         return 0 == size();
     }
 
-    @SuppressWarnings("unchecked") interface Mutable<E, S extends Set<E>, M extends Mutable<E, S, M>> extends Set<E> {
+    @SuppressWarnings("unchecked") interface Mutable<E, C extends Collection<E>, M extends Mutable<E, C, M>> extends Collection<E> {
 
         M self();
 
@@ -54,5 +54,7 @@ public interface Set<E> {
             elements.forEach(this::remove);
             return self();
         }
+
+        M clear();
     }
 }
