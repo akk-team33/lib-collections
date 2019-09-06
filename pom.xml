@@ -1,20 +1,12 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.team33.libs</groupId>
-    <artifactId>team33-collections</artifactId>
-    <version>8.2.1-SNAPSHOT</version>
-    <!--version>8.2.1</version-->
+    <groupId>de.team33.libs</groupId>
+    <artifactId>lib-collections</artifactId>
+    <version>8.3.1-SNAPSHOT</version>
     <name>Team33 Collections Library</name>
     <description>Team33 Collections library</description>
     <dependencies>
-        <dependency>
-            <groupId>net.team33.libs</groupId>
-            <artifactId>team33-patterns</artifactId>
-            <version>8.1.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
