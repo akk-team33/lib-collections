@@ -8,13 +8,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public abstract class StreamableTestBase {
 
@@ -22,42 +19,50 @@ public abstract class StreamableTestBase {
 
     @Test
     public void stream() {
-        final Random random = new Random();
-        final Supplier<Integer> nextInt = () -> random.nextInt(100);
-        Stream.concat(Stream.of(0, 1), Stream.generate(nextInt)).distinct().limit(20).forEach(size -> {
-            final Set<Long> origin = Stream.generate(random::nextLong).distinct().limit(size).collect(toSet());
-            final Streamable<?> subject = newSubject(origin.stream());
-            final Stream<?> stream = subject.stream();
+        new Series(25).forEach(step -> {
+            final Stream<?> stream = step.subject.stream();
             assertNotNull("Streamable.stream() must not return <null>", stream);
             assertFalse("Streamable.stream() must not return a parallel stream!", stream.isParallel());
             final Set<?> result = stream.collect(toSet());
-            assertEquals("Streamable.stream() must reflect all its original content", origin, result);
+            assertEquals("Streamable.stream() must reflect all its original content", step.origin, result);
         });
     }
 
     @Test
     public void forEach() {
-        new Operation().run(op -> {
+        new Series(30).forEach(step -> {
             final Set<Object> result = new HashSet<>();
-            op.subject.forEach(result::add);
-            assertEquals("Streamable.forEach() must reflect all the subject's original content", op.origin, result);
+            step.subject.forEach(result::add);
+            assertEquals("Streamable.forEach() must reflect all the subject's original content", step.origin, result);
         });
     }
 
-    private class Operation {
+    class Series {
 
         private final Random random = new Random();
-        private final Supplier<Integer> nextInt = () -> random.nextInt(100);
+        private final Supplier<Integer> nextInt = () -> random.nextInt(1000);
+        private final int limit;
 
-        private Set<Long> origin;
-        private Streamable<Long> subject;
+        Series(final int limit) {
+            this.limit = limit;
+        }
 
-        private void run(Consumer<Operation> consumer) {
-            Stream.concat(Stream.of(0, 1), Stream.generate(nextInt)).distinct().limit(20).forEach(size -> {
+        void forEach(Consumer<Step> consumer) {
+            // For 20 different values definitely including 0 and 1 ...
+            Stream.concat(Stream.of(0, 1), Stream.generate(nextInt))
+                    .distinct().limit(limit).map(Step::new)
+                    .forEach(consumer);
+        }
+
+        class Step {
+
+            final Set<Long> origin;
+            final Streamable<Long> subject;
+
+            private Step(final int size) {
                 this.origin = Stream.generate(random::nextLong).distinct().limit(size).collect(toSet());
                 this.subject = newSubject(origin.stream());
-                consumer.accept(this);
-            });
+            }
         }
     }
 }
