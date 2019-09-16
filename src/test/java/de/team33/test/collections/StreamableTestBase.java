@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -19,7 +20,7 @@ public abstract class StreamableTestBase {
 
     @Test
     public void stream() {
-        new Series(25).forEach(step -> {
+        new Series<>(this::newSubject, 25).forEach(step -> {
             final Stream<?> stream = step.subject.stream();
             assertNotNull("Streamable.stream() must not return <null>", stream);
             assertFalse("Streamable.stream() must not return a parallel stream!", stream.isParallel());
@@ -30,20 +31,22 @@ public abstract class StreamableTestBase {
 
     @Test
     public void forEach() {
-        new Series(30).forEach(step -> {
+        new Series<>(this::newSubject, 30).forEach(step -> {
             final Set<Object> result = new HashSet<>();
             step.subject.forEach(result::add);
             assertEquals("Streamable.forEach() must reflect all the subject's original content", step.origin, result);
         });
     }
 
-    class Series {
+    static class Series<S extends Streamable<Long>> {
 
+        private final Function<Stream<Long>, S> newSubject;
         private final Random random = new Random();
         private final Supplier<Integer> nextInt = () -> random.nextInt(1000);
         private final int limit;
 
-        Series(final int limit) {
+        Series(final Function<Stream<Long>, S> newSubject, final int limit) {
+            this.newSubject = newSubject;
             this.limit = limit;
         }
 
@@ -57,11 +60,11 @@ public abstract class StreamableTestBase {
         class Step {
 
             final Set<Long> origin;
-            final Streamable<Long> subject;
+            final S subject;
 
             private Step(final int size) {
                 this.origin = Stream.generate(random::nextLong).distinct().limit(size).collect(toSet());
-                this.subject = newSubject(origin.stream());
+                this.subject = newSubject.apply(origin.stream());
             }
         }
     }
