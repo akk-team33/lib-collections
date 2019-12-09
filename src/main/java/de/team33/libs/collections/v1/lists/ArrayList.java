@@ -1,6 +1,6 @@
-package de.team33.libs.collections.lists;
+package de.team33.libs.collections.v1.lists;
 
-import de.team33.libs.collections.List;
+import de.team33.libs.collections.v1.List;
 
 import java.util.stream.Stream;
 

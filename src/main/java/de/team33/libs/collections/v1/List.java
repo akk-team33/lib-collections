@@ -1,4 +1,4 @@
-package de.team33.libs.collections;
+package de.team33.libs.collections.v1;
 
 public interface List<E> extends Collection<E> {
 

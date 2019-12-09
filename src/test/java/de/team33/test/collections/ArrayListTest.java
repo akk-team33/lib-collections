@@ -1,6 +1,6 @@
 package de.team33.test.collections;
 
-import de.team33.libs.collections.lists.ArrayList;
+import de.team33.libs.collections.v1.lists.ArrayList;
 
 import java.util.stream.Stream;
 

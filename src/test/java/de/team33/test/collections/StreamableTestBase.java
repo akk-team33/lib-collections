@@ -1,6 +1,6 @@
 package de.team33.test.collections;
 
-import de.team33.libs.collections.Streamable;
+import de.team33.libs.collections.v1.Streamable;
 import org.junit.Test;
 
 import java.util.HashSet;

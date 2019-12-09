@@ -1,4 +1,4 @@
-package de.team33.libs.collections;
+package de.team33.libs.collections.v2;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;
