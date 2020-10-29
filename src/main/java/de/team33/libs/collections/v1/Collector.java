@@ -38,8 +38,8 @@ public class Collector<E, C extends Collection<E>> {
      * @see Collection#addAll(Collection)
      */
     @SafeVarargs
-    public final Collector<E, C> add(final E ... elements) {
-        return addAll(Arrays.asList(elements));
+    public final Collector<E, C> add(final E element, final E ... more) {
+        return add(element).addAll(Arrays.asList(more));
     }
 
     /**
@@ -51,10 +51,12 @@ public class Collector<E, C extends Collection<E>> {
     }
 
     /**
+     * Adds all
      * @see Collection#addAll(Collection)
      */
     public final Collector<E, C> addAll(final Stream<? extends E> elements) {
-        elements.forEach(subject::add);
+        elements.sequential()
+                .forEach(subject::add);
         return this;
     }
 

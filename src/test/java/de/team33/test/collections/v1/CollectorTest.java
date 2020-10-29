@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
@@ -68,12 +69,28 @@ public class CollectorTest {
     public final void add() {
         final LinkedList<Object> result = Collector.on(new LinkedList<>())
                                                    .add(template.get(0))
-                                                   .add(template.get(1))
-                                                   .add(template.get(2))
-                                                   .add(template.get(3))
+                                                   .add(template.get(1), template.get(2), template.get(3))
                                                    .add(template.get(4))
+                                                   .add(template.get(5))
                                                    .getSubject();
-        assertEquals(template.subList(0, 5), result);
+        assertEquals(template.subList(0, 6), result);
+    }
+
+    /**
+     * Ensures that {@link Collector#addAll(Stream)} has the same effect as {@link Collection#add(Object)}
+     * for each element from a given stream.
+     */
+    @SuppressWarnings({"SimplifyStreamApiCallChains", "UseBulkOperation"})
+    @Test
+    public final void addAllStream() {
+        final List<Integer> expected = new LinkedList<Integer>();
+        template.stream()
+                .forEach(expected::add);
+
+        final List<Number> result = Collector.on(new LinkedList<Number>())
+                                             .addAll(template.stream())
+                                             .getSubject();
+        assertEquals(expected, result);
     }
 
     /**
