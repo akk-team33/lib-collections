@@ -5,8 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -76,13 +78,48 @@ public class CollectingTest {
     }
 
     @Test
-    public final void addArray() {
-        assertTrue(Collecting.add(new TreeSet<>(), sample1, sample2, sample3).containsAll(samples));
+    public final void addMore() {
+        assertEquals(asList(sample1, sample2, sample3, NULL),
+                     Collecting.add(new LinkedList<>(), sample1, sample2, sample3, NULL));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public final void addNullMore() {
+        fail("should fail but was " + Collecting.add(null, sample1, sample2, sample3));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public final void addMoreUnsupported() {
+        fail("should fail but was " + Collecting.add(unmodifiableSet(new TreeSet<>()), sample1, sample2, sample3));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test(expected = ClassCastException.class)
+    public final void addMoreClassCast() {
+        final Set integers = new TreeSet<>(Integer::compareTo);
+        fail("should fail but was " + Collecting.add(integers, sample1, sample2, sample3));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public final void addMoreNull() {
+        assertTrue("should work", Collecting.add(new ArrayList<>(), sample1, sample2, sample3, NULL).contains(NULL));
+        fail("should fail but was " + Collecting.add(new TreeSet<>(), NULL, sample1, sample2, sample3));
     }
 
     @Test
     public final void addAll() {
-        assertTrue(Collecting.addAll(new TreeSet<>(), samples).containsAll(samples));
+        assertEquals(samples, Collecting.addAll(new ArrayList<>(), samples));
+    }
+
+    @Test
+    public final void addAllStream() {
+        assertEquals(samples, Collecting.addAll(new LinkedList<>(), samples.stream()));
+    }
+
+    @Test
+    public final void addAllIterable() {
+        assertEquals(samples, Collecting.addAll(new LinkedList<>(), (Iterable<String>) samples));
+        assertEquals(samples, Collecting.addAll(new LinkedList<>(), new MyIterable(samples)));
     }
 
     @Test
@@ -265,6 +302,20 @@ public class CollectingTest {
             fail(STRAIGHT_NOT_FAILED);
         } catch (final ClassCastException ignored) {
             assertFalse(Collecting.contains(treeSet, samplesAndIncompatibleType));
+        }
+    }
+
+    private static class MyIterable implements Iterable<String> {
+
+        private final List<String> backing;
+
+        public MyIterable(final List<String> backing) {
+            this.backing = backing;
+        }
+
+        @Override
+        public final Iterator<String> iterator() {
+            return backing.iterator();
         }
     }
 }
