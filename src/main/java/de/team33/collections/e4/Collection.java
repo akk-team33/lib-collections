@@ -1,5 +1,6 @@
 package de.team33.collections.e4;
 
+import java.util.Objects;
 import java.util.function.IntFunction;
 
 public interface Collection<E> extends Streamable<E> {
@@ -12,22 +13,30 @@ public interface Collection<E> extends Streamable<E> {
     /**
      * Determines whether this collection contains a specific element.
      * <p>
-     * An implementation must return a regular result even if the element in question cannot be contained in this
-     * collection. For example, a {@code null} argument must not result in a {@link NullPointerException}.
+     * There is no factual reason to expect that this method could throw an exception.
+     * Either a collection contains an element in question or it doesn't.
+     * In principle, this also applies to elements that cannot be contained in the collection at all.
+     * An implementation must behave accordingly.
      *
      * @return {@code true} if this collection contains the given element, otherwise {@code false}.
      */
-    boolean contains(Object element);
+    default boolean contains(final Object element) {
+        return stream().anyMatch(entry -> Objects.equals(entry, element));
+    }
 
     /**
      * Determines whether this collection contains all elements of another given aggregate.
      * <p>
-     * An implementation must return a regular result even if (some of) the elements in question cannot be contained in
-     * this collection. For example, a {@code null} element must not result in a {@link NullPointerException}.
+     * For a non-{@code null} argument, there is no factual reason to expect this method to throw an exception.
+     * Either a collection contains the elements in question or it doesn't.
+     * In principle, this also applies to elements that cannot be contained in the collection at all.
+     * An implementation must behave accordingly.
      *
      * @return {@code true} if this collection contains all elements of the given aggregate, otherwise {@code false}.
      * <p>
      * By definition, if the other aggregate is empty, this collection contains all elements of the other aggregate.
+     *
+     * @throws NullPointerException if {@code other} is {@code null}.
      */
     default boolean containsAll(final Streamable<?> other) {
         return other.stream().allMatch(this::contains);
@@ -36,13 +45,17 @@ public interface Collection<E> extends Streamable<E> {
     /**
      * Determines whether this collection contains any element of another given aggregate.
      * <p>
-     * An implementation must return a regular result even if (some of) the elements in question cannot be contained in
-     * this collection. For example, a {@code null} element must not result in a {@link NullPointerException}.
+     * For a non-{@code null} argument, there is no factual reason to expect this method to throw an exception.
+     * Either a collection contains the elements in question or it doesn't.
+     * In principle, this also applies to elements that cannot be contained in the collection at all.
+     * An implementation must behave accordingly.
      *
      * @return {@code true} if this collection contains any element of the given aggregate, otherwise {@code false}.
      * <p>
      * By definition, if the other aggregate is empty, this collection does not contain any element of the other
      * aggregate.
+     *
+     * @throws NullPointerException if {@code other} is {@code null}.
      */
     default boolean containsAny(final Streamable<?> other) {
         return other.stream().anyMatch(this::contains);
@@ -50,7 +63,7 @@ public interface Collection<E> extends Streamable<E> {
 
     /**
      * Determines whether this and another collection contain the same elements.
-     * Neither the order of the elements, any repetitions nor the size of the two collections is decisive.
+     * Neither the order of the elements, any repetitions nor the sizes of the two collections are decisive.
      * <p>
      * An implementation must return a regular result even if (some of) the elements in question cannot be contained in
      * this or the other collection. For example, a {@code null} element must not result in a
@@ -60,7 +73,7 @@ public interface Collection<E> extends Streamable<E> {
      * <p>
      * By definition, if both collections are empty, they do contain the same elements.
      */
-    default boolean isCoherent(final Collection<?> other) {
+    default boolean accords(final Collection<?> other) {
         return containsAll(other) && other.containsAll(this);
     }
 

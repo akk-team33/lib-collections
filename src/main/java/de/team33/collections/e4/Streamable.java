@@ -3,7 +3,8 @@ package de.team33.collections.e4;
 import java.util.stream.Stream;
 
 /**
- * Abstracts aggregate types that can provide a stream of a specific element type.
+ * An abstraction of types that (actually or virtually) contain elements of a specific type and that can provide a
+ * {@link Stream} for processing those elements.
  *
  * @param <E> The element type.
  */
